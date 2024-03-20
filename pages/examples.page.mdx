@@ -1,0 +1,217 @@
+# Quick example
+
+Let's assume you want to screen a person against the **_PEP_** lists. A quick curl request would look like this:
+
+```bash
+curl "https://api.haystraw.io/peps?firstName=John&lastName=Doe"
+-H "Accept: application/json; charset=utf-8; version=1"
+-H "X-API-Key: $API_KEY"
+```
+
+If any entries are found, the response from the server should look similar to this:
+
+```json
+[
+  {
+    "fullName": "John Doug Doe",
+    "dateOfBirth": "1985-08-15",
+    "positions": [
+      {
+        "description": "ABC Corporation",
+        "position": "Chief Executive Officer",
+        "listEntryDate": "2022-02-01"
+      },
+      {
+        "description": "XYZ Foundation",
+        "position": "Member of the Board",
+        "listEntryDate": "2020-05-10"
+      },
+      {
+        "position": "Financial Analyst",
+        "listExitDate": "2022-12-15"
+      }
+    ],
+    "politicalExposures": [
+      {
+        "country": "DK"
+      }
+    ],
+    "sources": [
+      {
+        "name": "PEP List Denmark",
+        "lastUpdate": "2023-10-19"
+      }
+    ]
+  }
+]
+```
+
+If you want to screen a person against the **_sanctions_** lists, a curl request could look like this:
+
+```bash
+curl "https://api.haystraw.io/sanctions?firstName=John&lastName=Doe"
+-H "Accept: application/json; charset=utf-8; version=1"
+-H "X-API-Key: $API_KEY"
+```
+
+If there's any entry, the response from the server would look like this:
+
+```json
+[
+  {
+    "aliases": [
+      {
+        "fullName": "Alex Turner",
+        "nameLanguage": "EN",
+      },
+      {
+        "fullName": "Alexandér Taylor",
+        "nameLanguage": "FR",
+      }
+    ],
+    "datesOfBirth": [
+      {
+        "date": "1985-11-02",
+        "calendarType": "GREGORIAN"
+      },
+      {
+        "year": "1986",
+        "isEstimate": true,
+        "calendarType": "GREGORIAN"
+      }
+      {
+        "yearRange": "1980-1990",
+        "calendarType": "GREGORIAN"
+      }
+    ],
+    "positions": [
+      {
+        "position": "CEO of Shady Investments INC",
+        "listEntryDate": "2023-12-11"
+      }
+    ],
+    "citizenships": [
+      {
+        "country": "US"
+      }
+    ],
+    "placesOfBirth": [
+      {
+        "address": "Greenfield City",
+        "country": "US"
+      }
+    ],
+    "contactInformation": [
+      {
+        "address": "123 Tech Lane, Silicon Valley, CA",
+        "country": "US"
+      }
+    ],
+    "sources": [
+      {
+        "name": "EU Financial Sanctions",
+        "entryReference": "REFERENCE_ID",
+        "lastUpdate": "2024-02-23"
+      }
+    ]
+  }
+]
+```
+
+If you want to screen the same person against both PEP and sanctions lists, you can create a a curl request like this one:
+
+```bash
+curl "https://api.haystraw.io/registrations?firstName=John&lastName=Doe"
+-H "Accept: application/json; charset=utf-8; version=1"
+-H "X-API-Key: $API_KEY"
+```
+
+If there's any entry on either PEP or sanction collections, the response from the server would look like this:
+
+```json
+{
+  "pepMatches": [
+    {
+      "fullName": "John Doug Doe",
+      "dateOfBirth": "1985-08-15",
+      "positions": [
+        {
+          "description": "ABC Corporation",
+          "position": "Chief Executive Officer",
+          "listEntryDate": "2022-02-01"
+        },
+        {
+          "description": "XYZ Foundation",
+          "position": "Member of the Board",
+          "listEntryDate": "2020-05-10"
+        },
+        {
+          "position": "Financial Analyst",
+          "listExitDate": "2022-12-15"
+        }
+      ],
+      "politicalExposures": [
+        {
+          "country": "DK"
+        }
+      ],
+      "sources": [
+        {
+          "name": "PEP List Denmark",
+          "lastUpdate": "2023-10-19"
+        }
+      ]
+    }
+  ],
+  "sanctionMatches": [
+    {
+      "aliases": [
+        {
+          "fullName": "John Doe",
+          "nameLanguage": "EN"
+        },
+        {
+          "fullName": "Johnnié Doug Dœu",
+          "nameLanguage": "FR"
+        }
+      ],
+      "datesOfBirth": [
+        {
+          "date": "1985-11-02",
+          "calendarType": "GREGORIAN"
+        }
+      ],
+      "positions": [
+        {
+          "position": "CEO of Another Investment INC",
+          "listEntryDate": "2023-12-11"
+        }
+      ],
+      "citizenships": [
+        {
+          "country": "US"
+        }
+      ],
+      "placesOfBirth": [
+        {
+          "address": "Greenfield City",
+          "country": "US"
+        }
+      ],
+      "contactInformation": [
+        {
+          "address": "123 Tech Lane, Silicon Valley, CA",
+          "country": "US"
+        }
+      ],
+      "sources": [
+        {
+          "name": "EU Financial Sanctions",
+          "entryReference": "REFERENCE_ID",
+          "lastUpdate": "2024-02-23"
+        }
+      ]
+    }
+  ]
+}
+```

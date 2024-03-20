@@ -1,0 +1,517 @@
+# API reference
+
+The API consists of a Root resource and two collections (politically exposed persons and sanctions).
+
+### Supported HTTP methods
+
+Calling the Root resource ("/") will return a JSON object containing information about the available endpoints and allowed methods. It should look like this:
+
+```json
+{
+  "endpoints": [
+    {
+      "path": "https://api.haystraw.io/peps",
+      "supportedMethods": ["GET"],
+      "supportedParameters": ["firstName", "lastName", "fullName"]
+    },
+    {
+      "path": "https://api.haystraw.io/sanctions",
+      "supportedMethods": ["GET"],
+      "supportedParameters": ["firstName", "lastName", "fullName"]
+    },
+    {
+      "path": "https://api.haystraw.io/registrations",
+      "supportedMethods": ["GET"],
+      "supportedParameters": ["firstName", "lastName", "fullName"]
+    }
+  ]
+}
+```
+
+For now, all endpoints support only `GET` operations.
+
+### Supported headers
+
+| Header      | Purpose                                                                            |
+| :---------- | :--------------------------------------------------------------------------------- |
+| `Accept`    | Used by clients to express the preference for content type.                        |
+| `X-API-Key` | Used to securely identify and grant access to clients for the requested resources. |
+
+### Missing fields
+
+As part of our commitment to simplicity, we want to highlight that unavailable fields will be omitted from the JSON response.
+
+### Bad request
+
+For now, the requests which do not offers sufficient information to filter the data (i.e firstName and lastName, or name) will return a 'Bad Request' response.
+
+### PEP Screening Endpoint
+
+```bash
+GET /peps;
+```
+
+This endpoint is designed to check individuals against Politically Exposed Persons (PEP) lists. It helps in identifying individuals holding prominent public positions.
+
+**Request format**
+
+To interact with this endpoint, you can use the following API request format in your preferred programming language.
+
+```bash
+GET /peps?firstName={firstName}&lastName={lastName}
+X-API-Key: YOUR_API_KEY
+Accept: application/json; charset=utf-8; version={preferredVersion}
+```
+
+Overview:
+
+- The first line represents the API call. In this example, we filter the PEPs collection by attempting an exact match on the _firstName_ and _lastName_ fields.
+
+- The second line is a mandatory header, that serves as the _API key_ for authentication. The absence of a valid _API key_ will result in a denied request.
+
+- The third line represents an optional, but highly recommended header. It specifies the desired response format and version preference.
+
+**Supported query parameters**
+
+| Parameter   | Description                                                                            |
+| :---------- | :------------------------------------------------------------------------------------- |
+| `lastName`  | The last name of the individual, as it appears on their official identity document     |
+| `firstName` | The first name(s) of the individual, as it appears on their official identity document |
+| `fullName`  | The full name of the individual, as it appears on their official identity document     |
+
+_\* for individuals with more than two names, only one lastName should be provided, and the rest as the firstName_
+_\*\* all names should be separated by an empty space character, whether they are a firstName or fullName_
+
+**Response format**
+
+The reponse follows a structured JSON format. Below is a generic example of how a response might look:
+
+```json
+[
+  {
+    "fullName": "John Doug Doe",
+    "dateOfBirth": "1985-08-15",
+    "positions": [
+      {
+        "description": "ABC Corporation",
+        "position": "Chief Executive Officer",
+        "listEntryDate": "2022-02-01"
+      },
+      {
+        "description": "XYZ Foundation",
+        "position": "Member of the Board",
+        "listEntryDate": "2020-05-10"
+      },
+      {
+        "position": "Financial Analyst",
+        "listExitDate": "2022-12-15"
+      }
+    ],
+    "politicalExposures": [
+      {
+        "country": "DK"
+      }
+    ],
+    "sources": [
+      {
+        "name": "PEP List Denmark",
+        "lastUpdate": "2023-10-19"
+      }
+    ]
+  }
+]
+```
+
+Overview:
+
+Because the endpoint returns a filtered collection, the response is an array containing objects, representing individual profiles that matches the screening criteria.
+
+The 'positions' field within these objects represents the roles or titles associated with the individual, providing details such as description, specific role, and entry/exit dates.
+
+A person can have political influence in multiple countries, thus the 'politicalExposures' array
+holds information about that.
+
+Data is gathered from multiple sources, so for the sake of simplicity, we cite all sources in the
+'sources' array.
+
+_Note:_  
+_The search is performed on full names and will return only complete matches (last name and all first names are present in the full name). To illustrate this let's consider this example:_
+
+_You want to search for a person with the last name 'Doe' and first name 'John Doug'._
+
+_If there is an entry in the list that has a firstName 'John Doug' and lastName 'Doe', it will be a 100% match, so it will be returned to you._
+
+_But, if there is another entry which has a firstName 'John' and lastName 'Doe', it will be a 67% match (we didn't find 'Doug' in the first name). Therefore, it will not be returned, since it's considered a partial match._
+
+**PEP object fields**
+
+| Field                | Type     | Description                                                   |
+| :------------------- | :------- | :------------------------------------------------------------ |
+| `fullName`           | `string` | the full name of the individual, as listed                    |
+| `dateOfBirth`        | `string` | individual's date of birth (ISO 8601)                         |
+| `positions`          | `Array`  | an array of `Position` objects associated with the individual |
+| `politicalExposures` | `Array`  | an array of `Exposure` objects associated with the individual |
+| `sources`            | `Array`  | an array of `Source` objects used for compiling the data      |
+
+**Position object fields**
+
+This object type is meant to encapsulate information about a specific position.
+
+| Field           | Type     | Description                                                   |
+| :-------------- | :------- | :------------------------------------------------------------ |
+| `position`      | `string` | the specific position or title associated with the individual |
+| `description`   | `string` | additional information regarding the position                 |
+| `listEntryDate` | `string` | when the individual was introduced on the list (ISO 8601)     |
+| `listExitDate`  | `string` | when the individual was removed from the list (ISO 8601)      |
+
+**Exposure object fields**
+
+This object type serves to show information about where a person is politically exposed.
+
+| Field     | Type     | Description                                      |
+| :-------- | :------- | :----------------------------------------------- |
+| `country` | `string` | country code (EU standard or ISO 3166-1 alpha-2) |
+
+**Source object fields**
+
+This object type holds information about a data source.
+
+| Field            | Type     | Description                                 |
+| :--------------- | :------- | :------------------------------------------ |
+| `name`           | `string` | name of the source                          |
+| `entryReference` | `string` | id on the source document, if it exists     |
+| `lastUpdate`     | `string` | last date the source got updated (ISO 8601) |
+
+_Note:_  
+_The 'lastUpdate' field represents the date the document was last updated by the source. This does not coincide with the last time we checked the specific source._
+
+### Sanctions Screening Endpoint
+
+```bash
+GET /sanctions;
+```
+
+This endpoint is designed to check individuals against international sanctions lists. This helps in detecting individuals subject to financial restrictions, ensuring compliance with regulatory standards.
+
+**Request format**
+
+Interacting with this endpoint is similar to the PEPs one. The following API request format can be used in your preferred programming language.
+
+```bash
+GET /sanctions?firstName={firstName}&lastName={lastName}
+X-API-Key: YOUR_API_KEY
+Accept: application/json; charset=utf-8; version={preferredVersion}
+```
+
+**Supported query parameters**
+
+| Parameter   | Description                                                                            |
+| :---------- | :------------------------------------------------------------------------------------- |
+| `lastName`  | The last name of the individual, as it appears on their official identity document     |
+| `firstName` | The first name(s) of the individual, as it appears on their official identity document |
+| `fullName`  | The full name of the individual, as it appears on their official identity document     |
+
+_\* there should be only one lastName provided, and the rest of names should be put as firstName with one space character between them_  
+_\*\* all names should be separated by an empty space character, whether they are a firstName or wholeName_
+
+**Response format**
+
+The response also adheres to a structured JSON format, and a generic response with entries found looks like this:
+
+```json
+[
+  {
+    "aliases": [
+      {
+        "fullName": "Alex Turner",
+        "nameLanguage": "EN",
+      },
+      {
+        "fullName": "Alexandér Taylor",
+        "nameLanguage": "FR",
+      }
+    ],
+    "datesOfBirth": [
+      {
+        "date": "1985-11-02",
+        "calendarType": "GREGORIAN"
+      },
+      {
+        "year": "1986",
+        "isEstimate": true,
+        "calendarType": "GREGORIAN"
+      }
+      {
+        "yearRange": "1980-1990",
+        "calendarType": "GREGORIAN"
+      }
+    ],
+    "positions": [
+      {
+        "position": "CEO of Shady Investments INC",
+        "listEntryDate": "2023-12-11"
+      }
+    ],
+    "citizenships": [
+      {
+        "country": "US"
+      }
+    ],
+    "placesOfBirth": [
+      {
+        "address": "Greenfield City",
+        "country": "US"
+      }
+    ],
+    "contactInformation": [
+      {
+        "address": "123 Tech Lane, Silicon Valley, CA",
+        "country": "US"
+      }
+    ],
+    "sources": [
+      {
+        "name": "EU Financial Sanctions",
+        "entryReference": "REFERENCE_ID",
+        "lastUpdate": "2024-02-23"
+      }
+    ]
+  }
+]
+```
+
+Overview:
+
+The endpoint returns a filtered array of objects, representing a collection. Each object contains information on an individual subjected to sanctions by internationally recognized bodies.
+
+Individuals may use multiple identities - that is why the fields "aliases", "citizenships", "datesOfBirth", "placesOfBirth", and "contactInformation" are arrays that can contain more than one object.
+
+uniquely identified using a "entryReference", which is taken straight from the source.
+
+For transparency, the sources are listed, including the "entryReference" (if available), which can be used to identify the entries on the source list.
+
+_Note:_  
+_The search is performed on full names and will return only complete matches (last name and all first names are present in the full name). To illustrate this let's consider this example:_
+
+_You want to search for a person with the last name 'Doe' and first name 'John Doug'._
+
+_If there is an entry in the list that has an alias 'John Doug Doe', it will be a 100% match, so it will be returned to you._
+
+_But, if there is another entry which has an alias 'John Doe', it will be a 67% match (we didn't find 'Doug' in the whole name). Therefore, it will not be returned, since it's considered a partial match._
+
+**Sanction object fields**
+
+| Field                | Type    | Description                                                       |
+| :------------------- | :------ | :---------------------------------------------------------------- |
+| `aliases`            | `Array` | an array of `Alias` objects associated with the individual        |
+| `datesOfBirth`       | `Array` | an array of `DateOfBirth` objects associated with the individual  |
+| `positions`          | `Array` | an array of `Position` objects associated with the individual     |
+| `citizenships`       | `Array` | an array of `Cizizenship` objects associated with the individual  |
+| `placesOfBirth`      | `Array` | an array of `PlaceOfBirth` objects associated with the individual |
+| `contactInformation` | `Array` | an array of `Contact` objects associated with the individual      |
+| `sources`            | `Array` | an array of `Source` objects used for compiling the data          |
+
+**Alias object fields**
+
+This object holds an alias and information about it.
+
+| Field          | Type     | Description                              |
+| :------------- | :------- | :--------------------------------------- |
+| `fullName`     | `string` | full name for the alias                  |
+| `nameLanguage` | `string` | language code (EU standard or ISO 639-1) |
+
+**DateOfBirth object fields**
+
+| Field          | Type      | Description                                                           |
+| :------------- | :-------- | :-------------------------------------------------------------------- |
+| `date`         | `string`  | individual's date of birth (ISO 8601)                                 |
+| `year`         | `string`  | year of birth                                                         |
+| `yearRange`    | `string`  | a range of possible years of birth                                    |
+| `isEstimate`   | `boolean` | indicates whether the birth information is estimated                  |
+| `calendarType` | `string`  | the type of calendar for the date (e.g. `GREGORIAN`, `ISLAMIC`, etc.) |
+
+**Position object fields**
+
+This object type is meant to encapsulate information about a specific position.
+
+| Field           | Type     | Description                                                   |
+| :-------------- | :------- | :------------------------------------------------------------ |
+| `position`      | `string` | the specific position or title associated with the individual |
+| `description`   | `string` | additional information regarding the position                 |
+| `listEntryDate` | `string` | when the individual was introduced on the list (ISO 8601)     |
+
+**Citizenship object fields**
+
+| Field     | Type     | Description                                      |
+| :-------- | :------- | :----------------------------------------------- |
+| `country` | `string` | country code (EU standard or ISO 3166-1 alpha-2) |
+| `remark`  | `string` | additional information regarding the citizenship |
+
+**PlaceOfBirth object fields**
+
+| Field     | Type     | Description                                               |
+| :-------- | :------- | :-------------------------------------------------------- |
+| `address` | `string` | any known information about the address, separated by ',' |
+| `country` | `string` | country code (EU standard or ISO 3166-1 alpha-2)          |
+
+**Contact object fields**
+
+| Field     | Type     | Description                                               |
+| :-------- | :------- | :-------------------------------------------------------- |
+| `address` | `string` | any known information about the address, separated by ',' |
+| `country` | `string` | country code (EU standard or ISO 3166-1 alpha-2)          |
+
+**Source object fields**
+
+**Source object fields**
+
+This object type holds information about a data source.
+
+| Field            | Type     | Description                                 |
+| :--------------- | :------- | :------------------------------------------ |
+| `name`           | `string` | name of the source                          |
+| `entryReference` | `string` | id on the source document, if it exists     |
+| `lastUpdate`     | `string` | last date the source got updated (ISO 8601) |
+
+_Note:_  
+_The 'lastUpdate' field represents the date the document was last updated by the source. This does not coincide with the last time we checked the specific source._
+
+### Registrations Screening Endpoint
+
+```bash
+GET /registrations;
+```
+
+This endpoint is meant to combine the functionality of the two previous endpoints together, allowing to check individuals against both PEP and sanctions lists with only one request.
+
+**Request format**
+
+To interact with this endpoint, you can use the following API request format in your preferred programming language.
+
+```bash
+GET /registrations?firstName={firstName}&lastName={lastName}
+X-API-Key: YOUR_API_KEY
+Accept: application/json; charset=utf-8; version={preferredVersion}
+```
+
+Overview:
+
+- The first line represents the API call. In this example, we filter the collections by attempting an exact match on the _firstName_ and _lastName_ fields.
+
+- The second line is a mandatory header, that serves as the _API key_ for authentication. The absence of a valid _API key_ will result in a denied request.
+
+- The third line represents an optional, but highly recommended header. It specifies the desired response format and version preference.
+
+**Supported query parameters**
+
+| Parameter   | Description                                                                            |
+| :---------- | :------------------------------------------------------------------------------------- |
+| `lastName`  | The last name of the individual, as it appears on their official identity document     |
+| `firstName` | The first name(s) of the individual, as it appears on their official identity document |
+| `fullName`  | The full name of the individual, as it appears on their official identity document     |
+
+_\* for individuals with more than two names, only one lastName should be provided, and the rest as the firstName_
+_\*\* all names should be separated by an empty space character, whether they are a firstName or fullName_
+
+**Response format**
+
+The reponse follows a structured JSON format. Below is a generic example of how a response might look:
+
+```json
+{
+  "pepMatches": [
+    {
+      "fullName": "John Doug Doe",
+      "dateOfBirth": "1985-08-15",
+      "positions": [
+        {
+          "description": "ABC Corporation",
+          "position": "Chief Executive Officer",
+          "listEntryDate": "2022-02-01"
+        },
+        {
+          "description": "XYZ Foundation",
+          "position": "Member of the Board",
+          "listEntryDate": "2020-05-10"
+        },
+        {
+          "position": "Financial Analyst",
+          "listExitDate": "2022-12-15"
+        }
+      ],
+      "politicalExposures": [
+        {
+          "country": "DK"
+        }
+      ],
+      "sources": [
+        {
+          "name": "PEP List Denmark",
+          "lastUpdate": "2023-10-19"
+        }
+      ]
+    }
+  ],
+  "sanctionMatches": [
+    {
+      "aliases": [
+        {
+          "fullName": "John Doe",
+          "nameLanguage": "EN"
+        },
+        {
+          "fullName": "Johnnié Doug Dœu",
+          "nameLanguage": "FR"
+        }
+      ],
+      "datesOfBirth": [
+        {
+          "date": "1985-11-02",
+          "calendarType": "GREGORIAN"
+        }
+      ],
+      "positions": [
+        {
+          "position": "CEO of Another Investment INC",
+          "listEntryDate": "2023-12-11"
+        }
+      ],
+      "citizenships": [
+        {
+          "country": "US"
+        }
+      ],
+      "placesOfBirth": [
+        {
+          "address": "Greenfield City",
+          "country": "US"
+        }
+      ],
+      "contactInformation": [
+        {
+          "address": "123 Tech Lane, Silicon Valley, CA",
+          "country": "US"
+        }
+      ],
+      "sources": [
+        {
+          "name": "EU Financial Sanctions",
+          "entryReference": "REFERENCE_ID",
+          "lastUpdate": "2024-02-23"
+        }
+      ]
+    }
+  ]
+}
+```
+
+Overview:
+
+This endpoint returns a JSON object containing two arrays - PEPs and sanctions. These arrays represent the matches found for a particular individual, separated by the collection where it was found. Essentially, this endpoint combines the results of what otherwise would have been two separate calls to "/peps" and "/sanctions" with the same name.
+
+**Registrations object fields**
+
+| Field             | Type    | Description                                                   |
+| :---------------- | :------ | :------------------------------------------------------------ |
+| `pepMatches`      | `Array` | an array of `PEP` objects that match the search criteria      |
+| `sanctionMatches` | `Array` | an array of `Sanction` objects that match the search criteria |
