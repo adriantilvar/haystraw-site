@@ -1,0 +1,10 @@
+Proprietary License
+
+Copyright (c) 2024 Haystraw
+
+All rights reserved. This code and its accompanying documentation are the property
+of Haystraw and may not be used, copied, modified, merged, published,
+distributed, sublicensed, or sold without the express written permission of
+Haystraw.
+
+For inquiries about licensing and usage, please contact hello@haystraw.io.
