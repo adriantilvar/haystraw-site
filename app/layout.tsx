@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import Navbar from "@/components/nav/nav-bar.component";
+import Navbar from "@components/navbar/navbar.component.tsx";
 
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import { ReactNode } from "react";
 
 export const metadata: Metadata = {
-  title: { template: "%s | haystraw", default: "haystraw" },
+  title: { template: "%s | Haystraw", default: "Haystraw" },
   description:
     "Screening individuals against PEP and sanctions lists has never been easier",
 };
@@ -15,7 +13,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
     <html lang="en">

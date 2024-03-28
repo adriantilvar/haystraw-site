@@ -1,11 +1,13 @@
-import PriceCard from "./price-card.component";
+import { Subscription } from "models/subscription.model.ts";
+import PriceCard from "./price-card.component.tsx";
 
-const subscriptions = [
+const subscriptions: Subscription[] = [
   {
     title: "Pay-as-you-go",
     description: "Enjoy flexible access, paying only for what you use",
     price: 0,
     benefits: ["€0.15 per API call"],
+    ctaText: "Start Now",
   },
   {
     title: "Essential",
@@ -13,6 +15,7 @@ const subscriptions = [
       "Get the essentials for businesses starting out or with a smaller customer base",
     price: 99,
     benefits: ["1,000 calls included", "€0.10 per API call afterwards"],
+    ctaText: "Get Essential",
   },
   {
     title: "Growth",
@@ -20,12 +23,14 @@ const subscriptions = [
       "Maintain cost-effectiveness while scaling your rapidly growing business",
     price: 499,
     benefits: ["10,000 calls included", "€0.05 per API call afterwards"],
+    ctaText: "Grow with Us",
   },
   {
     title: "Enterprise",
     description:
       "Tell us more about your business and we'll create a pricing structure around your specific needs",
     benefits: ["all the API usage you need", "priority customer support"],
+    ctaText: "Explore Enterprise",
   },
 ];
 

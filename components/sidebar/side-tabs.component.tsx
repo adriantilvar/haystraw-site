@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 const tabs = [
   {
@@ -22,8 +21,7 @@ const tabs = [
   },
 ];
 
-export default function NavTabs() {
-  const pathname = usePathname();
+export default function SideTabs() {
 
   return (
     <div className="">

@@ -1,14 +1,18 @@
-import HeroSection from "@/components/hero-section/hero-section.component";
-import PricingSection from "@/components/pricing-section/pricing-section.component";
-import Image from "next/image";
+import HeroSection from "@components/hero-section/hero-section.component.tsx";
+import PricingSection from "@components/pricing-section/pricing-section.component.tsx";
+import CallToActionSection from "@components/cta-section/cta-section.component.tsx";
+import Footer from "@components/footer/footer.component.tsx";
+import FeatureSection from "@components/feature-section/feature-section.component.tsx";
 
 export default function Home() {
   return (
     <div>
       <div className="h-screen">
         <HeroSection />
-        <div className="border-2 border-slate-900">Some benefits page?</div>
+        <FeatureSection />
         <PricingSection />
+        <CallToActionSection />
+        <Footer />
       </div>
     </div>
   );

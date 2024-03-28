@@ -1,21 +1,14 @@
-import Button from "../button/button.component";
-import Image from "next/image";
-
-import check from "../../public/check.svg";
-
-import CheckmarkIcon from "../icons/checkmark-icon.component";
+import Button from "@components/button/button.component.tsx";
+import CheckmarkIcon from "@icons/checkmark.icon.tsx";
+import { Subscription } from "models/subscription.model";
 
 export default function PriceCard({
   title,
   description,
   price,
   benefits,
-}: {
-  title: string;
-  description: string;
-  price?: number;
-  benefits: string[];
-}) {
+  ctaText,
+}: Subscription) {
   return (
     <div className="grid p-8 text-base grid-rows-10 max-h-96 max-w-72 ring-1 ring-gray-200 rounded-3xl">
       <h3 className="row-span-1 font-semibold lg:text-lg lg:leading-8">
@@ -29,9 +22,7 @@ export default function PriceCard({
           <span className="text-4xl font-bold tracking-tight">custom</span>
         ) : (
           <>
-            <span className="text-4xl font-bold tracking-tight">
-              €{price}
-            </span>
+            <span className="text-4xl font-bold tracking-tight">€{price}</span>
             <span className="text-sm font-semibold leading-6 text-gray-600">
               /month
             </span>
@@ -40,7 +31,7 @@ export default function PriceCard({
       </p>
 
       <div className="row-span-2">
-        <Button type="solid"> Get plan </Button>
+        <Button>{ctaText as string}</Button>
       </div>
 
       <ul className="row-span-3 text-sm leading-6">

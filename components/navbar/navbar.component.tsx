@@ -1,8 +1,7 @@
 import Link from "next/link";
-import NavLinks from "./nav-links.components";
-import Image from "next/image";
+import NavLinks from "./nav-links.component.tsx";
 
-import LogoIcon from "../icons/logo-icon.component";
+import LogoIcon from "@icons/logo.icon.tsx";
 
 export default function Navbar() {
   return (
@@ -15,7 +14,7 @@ export default function Navbar() {
           </Link>
         </div>
         <div className="flex flex-row items-center justify-center gap-2 text-base 3xl:flex-1 3xl:justify-end">
-          <NavLinks />
+          <NavLinks/>
         </div>
       </div>
     </nav>
