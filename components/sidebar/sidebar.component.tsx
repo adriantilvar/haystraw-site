@@ -1,9 +1,18 @@
-import SideTabs from "./side-tabs.component.tsx";
+"use client";
 
-export default function Sidebar() {
+import SideTabGroup from "./sidetab-group.component";
+
+export default function Sidebar({ tabs }: { tabs: any }) {
   return (
-    <aside className="flex flex-col">
-      <SideTabs />
+    <aside className="w-64 fixed flex flex-col p-2">
+      {tabs.map((tabGroup: any, index: number) => {
+        return (
+          <SideTabGroup
+            key={index}
+            {...tabGroup}
+          />
+        );
+      })}
     </aside>
   );
 }

@@ -1,4 +1,4 @@
-export type Subscription = {
+export type SubscriptionPlan = {
   title: string;
   description: string;
   price?: number;

@@ -1,5 +1,5 @@
-import remarkGfm from "remark-gfm";
 import nextMdx from "@next/mdx";
+import { mdxAnnotations } from "mdx-annotations";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -9,8 +9,9 @@ const nextConfig = {
 const withMdx = nextMdx({
   extension: /\.mdx?$/,
   options: {
-    remarkPlugins: [remarkGfm],
-    rehypePlugins: [],
+    remarkPlugins: [mdxAnnotations.remark],
+    rehypePlugins: [mdxAnnotations.rehype],
+    recmaPlugins: [mdxAnnotations.recma],
   },
 });
 

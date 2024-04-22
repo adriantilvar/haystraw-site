@@ -12,15 +12,14 @@ export default function Button({
   return (
     <button
       className={clsx(
-        "inline px-3 py-2 text-sm font-semibold text-center rounded-md text-off-black",
+        "inline w-full rounded-md px-3 py-2 text-center text-sm font-semibold text-off-black",
         {
-          "border hover:bg-slate-200 border-off-black/25": type === "outline",
+          "border border-off-black/25 hover:bg-slate-200": type === "outline",
           "hover:bg-slate-200 ": type === "ghost",
-          "bg-off-black hover:bg-slate-700 text-off-white":
+          "bg-off-black text-off-white hover:bg-slate-700":
             !type || type === "solid",
         }
-      )}
-    >
+      )}>
       {children}
     </button>
   );

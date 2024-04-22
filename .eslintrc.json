@@ -2,6 +2,7 @@
   "extends": [
     "next/core-web-vitals",
     "plugin:mdx/recommended",
-    "eslint:recommended"
+    "eslint:recommended",
+    "prettier"
   ]
 }

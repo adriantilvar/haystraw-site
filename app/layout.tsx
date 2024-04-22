@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { ReactNode } from "react";
+
 import Navbar from "@components/navbar/navbar.component.tsx";
 
 import "./globals.css";
-import { ReactNode } from "react";
 
 export const metadata: Metadata = {
   title: { template: "%s | Haystraw", default: "Haystraw" },
@@ -17,9 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-slate-50">
+      <body className="">
         <Navbar />
-        {children}
+        <div>{children}</div>
       </body>
     </html>
   );

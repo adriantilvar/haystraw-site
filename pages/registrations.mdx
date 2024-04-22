@@ -1,0 +1,201 @@
+
+  <Row>
+
+
+  <Column>
+
+  # The Registration object
+
+
+  This is a description of the Registration object, which holds both pep matches and sanction matches for a person, with the attributes below. Lorem Ipsum Doloret. Lorem Ipsum Doloret. Lorem Ipsum Doloret. Lorem Ipsum Doloret.
+
+
+  ### Attributes
+
+<Properties>
+
+<Property name="pepMatches" type="array">An array containing all the matching PEP objects in the database</Property>
+
+<Property name="sanctionMatches" type="array">An array containing all the matching 'Sanctioned Person' objects in the database</Property>
+
+</Properties>
+
+
+
+
+  </Column>
+
+
+  <Column>
+
+  ```json {{ title: 'Response' }}
+{
+   pepMatches:  [
+    {
+       fullName:  "John Doug Doe",
+       dateOfBirth:  "1985-08-15",
+       positions:  [
+        {
+           function:  "Chief Executive Officer",
+           description:  "ABC Corporation",
+           listEntryDate:  "2022-02-01",
+           listExitDate:  "2022-12-15"
+         }
+      ],
+       politicalExposure:  [
+        {
+           name:  "Denmark",
+           iso:  "DK"
+         }
+      ],
+       sources:  [
+        {
+           name:  "PEP List Denmark",
+           lastUpdate:  "2023-10-19"
+         }
+      ]
+     }
+  ],
+   sanctionMatches:  {
+     aliases:  [
+      {
+         fullName:  "Alexandér Turnier",
+         nameLanguage:  "FR"
+       }
+    ]
+   },
+   datesOfBirth:  [
+    {
+       date:  "1985-11-02",
+       calendarType:  "GREGORIAN"
+     }
+  ],
+   positions:  [
+    {
+       function:  "CEO",
+       description:  "Shady Investments INC",
+       listEntryDate:  "2022-02-01",
+       listExitDate:  "2022-12-15"
+     }
+  ],
+   citizenships:  [
+    {
+       name:  "United States of America",
+       iso:  "US"
+     }
+  ],
+   placesOfBirth:  [
+    {
+       country:  "CA",
+       details:  "Maple Town, Leafington Street 4"
+     }
+  ],
+   contactInformation:  [
+    {
+       country:  "CA",
+       details:  "Maple Town"
+     }
+  ],
+   sources:  [
+    {
+       name:  "EU Financial Sanctions",
+       entryReference:  "EU.234.2",
+       lastUpdate:  "2023-10-19"
+     }
+  ]
+ }
+```
+
+
+  </Column>
+
+
+  </Row>
+
+
+  <Row>
+
+
+  <Column>
+
+  # Check all entries
+
+
+  Checks a person against both PEP and Sanctions databases and returns the matching entries as an array
+
+
+
+  
+
+
+  ### Query parameters
+
+<Properties>
+
+<Property name="firstName" type="string">
+The first name(s) of the individual, as it appears on their official identity document
+
+<Note> Must be used in conjunction with lastName </Note>
+
+</Property>
+
+<Property name="lastName" type="string">
+The last name of the individual, as it appears on their official identity document
+
+<Note> Must be used in conjunction with firstName </Note>
+
+</Property>
+
+<Property name="fullName" type="string">
+The full name of the individual, as it appears on their official identity document
+
+<Note> Must be standalone (firstName or lastName should not be present) </Note>
+
+</Property>
+
+</Properties>
+
+
+
+  ### Headers
+
+<Properties>
+
+<Property name="X-API-Key" type="string">
+Used to securely identify and grant access to clients for the requested resources
+
+</Property>
+
+</Properties>
+
+
+
+  </Column>
+
+
+  <Column>
+
+  <CodeGroup tag="GET" label="/registrations">
+
+```cURL {{ title: 'cURL' }}
+curl -G https://api.haystraw.io/registrations?fullName=John%20Doe
+-H "X-API-Key: $API_KEY" 
+```
+
+```js {{ title: 'JS' }}
+fetch('https://api.haystraw.io/registrations?fullName=John%20Doe', {
+headers: {
+	X-API-Key: '$API_KEY',
+}
+})
+```
+
+</CodeGroup>
+
+
+
+  </Column>
+
+
+  </Row>
+

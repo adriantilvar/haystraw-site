@@ -1,0 +1,183 @@
+
+  <Row>
+
+
+  <Column>
+
+  # The Sanctioned Person object
+
+
+  This is a description of the sanctioned person object with the attributes below. Lorem Ipsum Doloret. Lorem Ipsum Doloret. Lorem Ipsum Doloret. Lorem Ipsum Doloret.
+
+
+  ### Attributes
+
+<Properties>
+
+<Property name="aliases" type="array">An array of Alias objects associated with the individual</Property>
+
+<Property name="datesOfBirth" type="array">An array comprised of any combination of Date, Year, or YearRange objects associated with the individual</Property>
+
+<Property name="positions" type="array">An array of Position objects associated with the individual</Property>
+
+<Property name="citizenships" type="array">An array of Country objects representing citizenship(s) the individual holds</Property>
+
+<Property name="placesOfBirth" type="array">An array of Address objects associated with an individual's place of birth</Property>
+
+<Property name="contactInformation" type="array">An array of Address objects associated with an individual's contact location(s)</Property>
+
+<Property name="sources" type="array">An array of Source objects citing where the information was obtained in compiling the data</Property>
+
+</Properties>
+
+
+
+
+  </Column>
+
+
+  <Column>
+
+  ```json {{ title: 'Response' }}
+{
+   aliases:  [
+    {
+       fullName:  "Alexandér Turnier",
+       nameLanguage:  "FR"
+     }
+  ],
+   datesOfBirth:  [
+    {
+       date:  "1985-11-02",
+       calendarType:  "GREGORIAN"
+     }
+  ],
+   positions:  [
+    {
+       function:  "CEO",
+       description:  "Shady Investments INC",
+       listEntryDate:  "2022-02-01",
+       listExitDate:  "2022-12-15"
+     }
+  ],
+   citizenships:  [
+    {
+       name:  "United States of America",
+       iso:  "US"
+     }
+  ],
+   placesOfBirth:  [
+    {
+       country:  "CA",
+       details:  "Maple Town, Leafington Street 4"
+     }
+  ],
+   contactInformation:  [
+    {
+       country:  "CA",
+       details:  "Maple Town"
+     }
+  ],
+   sources:  [
+    {
+       name:  "EU Financial Sanctions",
+       entryReference:  "EU.234.2",
+       lastUpdate:  "2023-10-19"
+     }
+  ]
+ }
+```
+
+
+  </Column>
+
+
+  </Row>
+
+
+  <Row>
+
+
+  <Column>
+
+  # Check sanctions
+
+
+  Checks a person against the Sanctions database and returns the matching entries as an array
+
+
+
+  
+
+
+  ### Query parameters
+
+<Properties>
+
+<Property name="firstName" type="string">
+The first name(s) of the individual, as it appears on their official identity document
+
+<Note> Must be used in conjunction with lastName </Note>
+
+</Property>
+
+<Property name="lastName" type="string">
+The last name of the individual, as it appears on their official identity document
+
+<Note> Must be used in conjunction with firstName </Note>
+
+</Property>
+
+<Property name="fullName" type="string">
+The full name of the individual, as it appears on their official identity document
+
+<Note> Must be standalone (firstName or lastName should not be present) </Note>
+
+</Property>
+
+</Properties>
+
+
+
+  ### Headers
+
+<Properties>
+
+<Property name="X-API-Key" type="string">
+Used to securely identify and grant access to clients for the requested resources
+
+</Property>
+
+</Properties>
+
+
+
+  </Column>
+
+
+  <Column>
+
+  <CodeGroup tag="GET" label="/sanctions">
+
+```cURL {{ title: 'cURL' }}
+curl -G https://api.haystraw.io/sanctions?fullName=Alex%20Turner
+-H "X-API-Key: $API_KEY" 
+```
+
+```js {{ title: 'JS' }}
+fetch('https://api.haystraw.io/sanctions?fullName=Alex%20Turner', {
+headers: {
+	X-API-Key: '$API_KEY',
+}
+})
+```
+
+</CodeGroup>
+
+
+
+  </Column>
+
+
+  </Row>
+

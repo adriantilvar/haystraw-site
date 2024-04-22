@@ -1,0 +1,141 @@
+  <Row>
+
+  <Column>
+
+# The Politically Exposed Person (PEP) object
+
+This is a description of the politically exposed person object with the attributes below. Lorem Ipsum Doloret. Lorem Ipsum Doloret. Lorem Ipsum Doloret. Lorem Ipsum Doloret.
+
+### Attributes
+
+<Properties>
+
+<Property name="fullName" type="string">
+  The full name of the individual, as it appears on the source
+</Property>
+
+<Property name="dateOfBirth" type="string">
+  Individual's date of birth in ISO 8601 format
+</Property>
+
+<Property name="positions" type="array">
+  An array of Position objects associated with the individual
+</Property>
+
+<Property name="politicalExposure" type="array">
+  An array of Country objects representing where the individual is politically
+  exposed
+</Property>
+
+<Property name="sources" type="array">
+  An array of Source objects citing where the information was obtained in
+  compiling the data
+</Property>
+
+</Properties>
+
+  </Column>
+
+  <Column>
+
+```json {{ title: 'Response' }}
+{
+  "fullName": "John Doug Doe",
+  "dateOfBirth": "1985-08-15",
+  "positions": [
+    {
+      "function": "Chief Executive Officer",
+      "description": "ABC Corporation",
+      "listEntryDate": "2022-02-01",
+      "listExitDate": "2022-12-15"
+    }
+  ],
+  "politicalExposure": [
+    {
+      "name": "Denmark",
+      "iso": "DK"
+    }
+  ],
+  "sources": [
+    {
+      "name": "PEP List Denmark",
+      "lastUpdate": "2023-10-19"
+    }
+  ]
+}
+```
+
+  </Column>
+
+  </Row>
+
+  <Row>
+
+  <Column>
+
+# Check PEPs
+
+Checks a person against the PEP database and returns the matching entries as an array
+
+### Query parameters
+
+<Properties>
+
+<Property name="firstName" type="string">
+The first name(s) of the individual, as it appears on their official identity document
+
+<Note> Must be used in conjunction with lastName </Note>
+
+</Property>
+
+<Property name="lastName" type="string">
+The last name of the individual, as it appears on their official identity document
+
+<Note> Must be used in conjunction with firstName </Note>
+
+</Property>
+
+<Property name="fullName" type="string">
+The full name of the individual, as it appears on their official identity document
+
+<Note> Must be standalone (firstName or lastName should not be present) </Note>
+
+</Property>
+
+</Properties>
+
+### Headers
+
+<Properties>
+
+<Property name="X-API-Key" type="string">
+Used to securely identify and grant access to clients for the requested resources
+
+</Property>
+
+</Properties>
+
+  </Column>
+
+  <Column>
+
+  <CodeGroup tag="GET" label="/peps">
+
+```cURL {{ title: 'cURL' }}
+curl -G https://api.haystraw.io/peps?fullName=John%20Doug%20Doe
+-H "X-API-Key: $API_KEY"
+```
+
+```js {{ title: 'JS' }}
+fetch('https://api.haystraw.io/peps?fullName=John%20Doug%20Doe', {
+headers: {
+	X-API-Key: '$API_KEY',
+}
+})
+```
+
+</CodeGroup>
+
+  </Column>
+
+  </Row>

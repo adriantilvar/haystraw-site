@@ -5,8 +5,30 @@ const config: Config = {
   content: [
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    spacing: {
+      "0": "0px",
+      "1": "4px",
+      "2": "8px",
+      "3": "12px",
+      "4": "16px",
+      "5": "20px",
+      "6": "24px",
+      "8": "32px",
+      "12": "48px",
+      "16": "64px",
+      "24": "96px",
+      "32": "128px",
+      "48": "192px",
+      "64": "256px",
+      "80": "320px",
+      "96": "384px",
+      "128": "512px",
+      "160": "640px",
+      "192": "768px",
+    },
     extend: {
       colors: {
         "off-white": "#f8fafc",
